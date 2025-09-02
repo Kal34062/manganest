@@ -16,7 +16,16 @@ const auth = getAuth(app);
 
 document.addEventListener("DOMContentLoaded", () => {
   const userInfo = document.getElementById("user-info");
+  onAuthStateChanged(auth, user => {
+    if (user && userInfo) userInfo.textContent = `Logged in as: ${user.displayName || "User"} (${user.email})`;
+    else if (userInfo) userInfo.textContent = "Browsing as Guest";
+  });
+
   const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => signOut(auth).then(() => window.location.href = "Singup.html"));
+  }
+
   const hero = document.getElementById("hero-mangas");
   const heroTitle = document.getElementById("heroTitle");
   const heroSynopsis = document.getElementById("heroSynopsis");
@@ -29,15 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const titles = manga.attributes?.title;
     if (!titles) return "No Title";
     if (titles.en) return titles.en;
-    const firstLang = Object.keys(titles)[0];
-    return titles[firstLang] || "No Title";
-  }
-
-  function seededShuffle(array) {
-    const today = new Date().toISOString().slice(0, 10);
-    let seed = 0;
-    for (let i = 0; i < today.length; i++) seed += today.charCodeAt(i);
-    return [...array].sort((a, b) => (a.id.charCodeAt(0) + seed) - (b.id.charCodeAt(0) + seed));
+    return titles[Object.keys(titles)[0]] || "No Title";
   }
 
   async function fetchTopManga() {
@@ -47,8 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const cached = localStorage.getItem(cacheKey);
     const cachedTime = localStorage.getItem(cacheTimeKey);
-
-    if (cached && cachedTime && (now - cachedTime) < 86400000) {
+    if (cached && cachedTime && (now - cachedTime) < 86400000) { // 24h cache
       topMangaList = JSON.parse(cached);
       updateHero();
       populateGrid();
@@ -56,35 +56,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch("https://api.mangadex.org/manga?limit=10&order[followedCount]=desc&includes[]=cover_art");
-      const data = await response.json();
+      const res = await fetch("https://api.mangadex.org/manga?limit=10&order[followedCount]=desc&includes[]=cover_art");
+      const data = await res.json();
       topMangaList = data.data || [];
-
       localStorage.setItem(cacheKey, JSON.stringify(topMangaList));
       localStorage.setItem(cacheTimeKey, now);
-
       updateHero();
       populateGrid();
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error("Failed to fetch MangaDex:", err);
     }
   }
 
   function updateHero() {
-    if (topMangaList.length === 0) return;
+    if (!topMangaList.length) return;
     const manga = topMangaList[Math.floor(Math.random() * topMangaList.length)];
-    const title = getMangaTitle(manga);
-    heroTitle.textContent = title;
+    heroTitle.textContent = getMangaTitle(manga);
     heroSynopsis.textContent = manga.attributes?.description?.en
-      ? manga.attributes.description.en.replace(/\[.*?\]\(.*?\)/g, "").substring(0, 200) + "..."
+      ? manga.attributes.description.en.replace(/\[.*?\]\(.*?\)/g, "").slice(0, 200) + "..."
       : "No synopsis available";
 
     const cover = manga.relationships?.find(rel => rel.type === "cover_art");
-    const coverUrl = cover
+    hero.style.backgroundImage = cover && cover.attributes?.fileName
       ? `https://uploads.mangadex.org/covers/${manga.id}/${cover.attributes.fileName}.512.jpg`
-      : "https://via.placeholder.com/800x600?text=No+Cover";
+      : "url('https://via.placeholder.com/800x600?text=No+Cover')";
 
-    hero.style.backgroundImage = `url(${coverUrl})`;
     heroContent.classList.add("show");
   }
 
@@ -99,50 +95,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const card = document.createElement("div");
       card.classList.add("manga-card");
-
-      const img = document.createElement("img");
-      img.src = coverUrl;
-      img.alt = title;
-      img.loading = "lazy";
-      img.crossOrigin = "anonymous"; // Fix CORS issue
-      card.appendChild(img);
-
-      const infoDiv = document.createElement("div");
-      infoDiv.classList.add("info");
-      infoDiv.innerHTML = `<h3>${title}</h3><button id="readbtn-${manga.id}" class="readbtn">Read</button>`;
-      card.appendChild(infoDiv);
-
+      card.innerHTML = `
+        <img src="${coverUrl}" alt="${title}" loading="lazy">
+        <div class="info">
+          <h3>${title}</h3>
+          <button id="readbtn-${manga.id}" class="readbtn">Read</button>
+        </div>
+      `;
       mangaGrid.appendChild(card);
 
       const readBtn = card.querySelector(`#readbtn-${manga.id}`);
-      readBtn.addEventListener("click", () => {
-        window.location.href = `detail.html?id=${manga.id}`;
-      });
+      readBtn.addEventListener("click", () => window.location.href = `detail.html?id=${manga.id}`);
     });
   }
 
-  onAuthStateChanged(auth, (user) => {
-    if (user && userInfo) {
-      userInfo.textContent = `Logged in as: ${user.displayName} (${user.email})`;
-    } else if (userInfo) {
-      userInfo.textContent = "Browsing as Guest";
-    }
-  });
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth).then(() => {
-        window.location.href = "Singup.html";
-      });
-    });
-  }
-
-  const links = document.querySelectorAll(".icon-list a");
-  links.forEach(link => {
+  // Navigation icon behavior
+  document.querySelectorAll(".icon-list a").forEach(link => {
     link.addEventListener("click", e => {
       if (link.getAttribute("href") === "#") {
         e.preventDefault();
-        links.forEach(l => l.classList.remove("active"));
+        document.querySelectorAll(".icon-list a").forEach(l => l.classList.remove("active"));
         link.classList.add("active");
       }
     });
