@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <title>MangaNest</title>
+  <meta name="author" content="Abubakar Sadiq Ibrahim">
+  <meta name="description" content="MangaNest - Explore and read your favorite manga online">
+  <meta name="theme-color" content="#ff4d4d">
+  
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="stylesheet" href="home.css">
+  
+  <!-- Register service worker for PWA -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .then((reg) => console.log("Service Worker registered", reg))
+        .catch((err) => console.log("Service Worker registration failed", err));
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <!--------Heroic Section------>
+    <section class="hero" id="hero-mangas">
+      <div class="overlay"></div>
+      <div class="hero-content" id="heroContent">
+        <h2 id="heroTitle">Loading...</h2>
+        <p id="heroSynopsis">Please wait...</p>
+      </div>
+    </section>
+    
+    <!--------Top Section------>
+    <section class="Top-manga" id="topMangaSection">
+      <h2 class="popuplar">Popular Manga</h2>
+      <div class="manga-grid" id="mangaGrid">
+        Loading top manga...
+      </div>
+    </section>
+    
+    <!--------Footer Section------>
+    <section class="footer">
+      <div class="footer-icons">
+        <ul class="icon-list">
+          <li><a href="#" class="active"><span class="material-symbols-outlined">home</span></a></li>
+          <li><a href="search.html"><span class="material-symbols-outlined">search</span></a></li>
+          <li><a href="bookmark.html"><span class="material-symbols-outlined">database</span></a></li>
+          <li><a href="setting.html"><span class="material-symbols-outlined">settings</span></a></li>
+        </ul>
+      </div>
+    </section>
+    <!-- Floating Install Button -->
+<button id="install-btn" class="install-btn">
+  <span class="material-symbols-outlined">download</span> Install
+</button>
+  </div>
+  
+  <!-- Scripts -->
+  <script type="module" src="home.js"></script>
+  <script src="Install.js"></script>
+</body>
+
+</html>

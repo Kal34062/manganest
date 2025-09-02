@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Read Manga</title>
+  <link rel="stylesheet" href="read.css">
+  <!-- Google Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body>
+  <div class="reader-container">
+    <h2 id="chapter-title">Loading...</h2>
+    <div id="pages"></div>
+  </div>
+
+  <!-- Fixed bottom nav -->
+  <div class="controls">
+    <button id="prev-btn">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+
+    <select id="chapter-select"></select>
+
+    <button id="next-btn">
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+
+    <button id="scroll-top-btn">
+      <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+  </div>
+
+  <script src="read.js"></script>
+</body>
+</html>

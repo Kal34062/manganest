@@ -1,0 +1,274 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: black;
+}
+
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 35vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+.hero .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  text-align: center;
+  padding: 0 20px;
+  opacity: 0; 
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.hero-content.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-content h2 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.hero-btn {
+  padding: 10px 25px;
+  font-size: 1rem;
+  background-color: #ff4757;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: #e84118;
+}
+
+
+@media (max-width: 768px) {
+  .hero-content h2 {
+    font-size: 2.2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 60vh;
+  }
+  .hero-content h2 {
+    font-size: 1.8rem;
+  }
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+  .hero-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+.top-manga {
+  margin: 50px 20px;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.popuplar {
+  margin: 20px;
+  color: #fff;
+}
+
+.manga-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.manga-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly; /* spread content evenly */
+  background-color: #222;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.manga-card:hover {
+  transform: scale(1.02);
+}
+
+.manga-card img {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.manga-card .info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex: 1;
+}
+
+.manga-card h3 {
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 auto;
+}
+
+.manga-card button {
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.manga-card button:hover {
+  background-color: #ff1a1a;
+}
+
+@media (max-width: 768px) {
+  .manga-card img {
+    width: 150px;
+  }
+
+  .manga-card h3 {
+    font-size: 12px;
+  }
+
+  .manga-card button {
+    padding: 10px 20px;
+  }
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.footer-icons {
+  padding: 20px;
+  background: #222;
+  border-radius: 10px 10px 0 0;
+}
+.icon-list {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+.icon-list li a {
+  font-size: 28px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.4s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUp 0.2s forwards;
+}
+.icon-list li:nth-child(1) a { animation-delay: 0.1s; }
+.icon-list li:nth-child(2) a { animation-delay: 0.2s; }
+.icon-list li:nth-child(3) a { animation-delay: 0.3s; }
+.icon-list li:nth-child(4) a { animation-delay: 0.4s; }
+.icon-list li:nth-child(5) a { animation-delay: 0.5s; }
+
+.icon-list li a span {
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.icon-list li a:hover span,
+.icon-list li a.active span {
+  color: #ff4d4d;
+  transform: scale(1.2);
+}
+
+.icon-list li a.active span {
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1.2); }
+}
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating Install Button */
+.install-btn {
+  position: fixed;
+  bottom: 80px; /* above bottom nav */
+  right: 20px;
+  display: none; /* hidden by default */
+  align-items: center;
+  gap: 5px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 18px;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease;
+}
+
+.install-btn:hover {
+  transform: scale(1.05);
+}
+
+.install-btn span {
+  font-size: 20px;
+}
